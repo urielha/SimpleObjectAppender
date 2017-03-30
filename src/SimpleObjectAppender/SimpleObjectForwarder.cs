@@ -5,33 +5,25 @@ using System.Collections.Generic;
 
 namespace SimpleObjectAppender
 {
-    class SimpleForwarder : log4net.Appender.ForwardingAppender
+    class SimpleObjectForwarder : log4net.Appender.ForwardingAppender
     {
         const string defaultSeparator = ", ";
         const string defaultEqualsSymbol = ":";
 
         public string Separator { get; set; }
         public string EqualsSymbol { get; set; }
-        public IDescriptor Details { get; set; }
+        public IDescriptor Descriptor { get; set; }
 
-        public override void ActivateOptions()
+        public SimpleObjectForwarder()
         {
-            base.ActivateOptions();
+            EqualsSymbol = defaultEqualsSymbol;
+            Separator = defaultSeparator;
+            Descriptor = new Descriptor();
+        }
 
-            if (string.IsNullOrEmpty(EqualsSymbol))
-            {
-                EqualsSymbol = defaultEqualsSymbol;
-            }
-
-            if (string.IsNullOrEmpty(Separator))
-            {
-                Separator = defaultSeparator;
-            }
-
-            if (Details == null)
-            {
-                Details = new Descriptor();
-            }
+        public void AddDetails(Descriptor descriptor)
+        {
+            Descriptor = descriptor;
         }
 
         protected override void Append(LoggingEvent loggingEvent)
@@ -51,7 +43,7 @@ namespace SimpleObjectAppender
 
         private LoggingEvent ProcessLogEvent(LoggingEvent loggingEvent)
         {
-            var result = Details.getAllProperties(loggingEvent.MessageObject);
+            var result = Descriptor.getAllProperties(loggingEvent.MessageObject);
             var builder = new StringBuilder();
             int i = 0;
             foreach (var kvp in result)

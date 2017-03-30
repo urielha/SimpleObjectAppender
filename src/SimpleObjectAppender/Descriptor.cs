@@ -1,12 +1,14 @@
 ﻿using log4net.Core;
 using System.Collections.Generic;
 using System.Reflection;
+using System;
 
 namespace SimpleObjectAppender
 {
     interface IDescriptor
     {
         List<KeyValuePair<string, string>> getAllProperties(object msgObj);
+        string getPropertyValue(object msgObj, string propertyName);
     }
 
     public class Descriptor : IDescriptor
@@ -21,19 +23,28 @@ namespace SimpleObjectAppender
 
         public List<KeyValuePair<string, string>> getAllProperties(object msgObj)
         {
-            List<KeyValuePair<string, string>> kvp = new List<KeyValuePair<string, string>>();
+            List<KeyValuePair<string, string>> kvpList = new List<KeyValuePair<string, string>>();
             foreach (var name in properties)
             {
-                var propInfo = msgObj.GetType().GetProperty(name, flags);
-                if(propInfo == null)
+                var value = getPropertyValue(msgObj, name);
+                if (value != null)
                 {
-                    continue;
+                    kvpList.Add(new KeyValuePair<string, string>(name, value));
                 }
-
-                var value = propInfo.GetValue(msgObj, null).ToString();
-                kvp.Add(new KeyValuePair<string, string>(name, value));
             }
-            return kvp;
+            return kvpList;
+        }
+
+        public string getPropertyValue(object msgObj, string propertyName)
+        {
+            var propInfo = msgObj.GetType().GetProperty(propertyName, flags);
+            if (propInfo == null)
+            {
+                return null;
+            }
+
+            var value = propInfo.GetValue(msgObj, null).ToString();
+            return value;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace SimpleObjectAppender
             logger.Info("hello");
             while (true)
             {
+                Console.WriteLine();
                 logger.Info(new Person { Age = 1, Name = "Person" });
                 Console.ReadKey();
             }
