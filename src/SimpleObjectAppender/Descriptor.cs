@@ -7,33 +7,12 @@ namespace SimpleObjectAppender
 {
     interface IDescriptor
     {
-        List<KeyValuePair<string, string>> getAllProperties(object msgObj);
         string getPropertyValue(object msgObj, string propertyName);
     }
 
     public class Descriptor : IDescriptor
     {
-        private static BindingFlags flags = BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        private List<string> properties = new List<string>();
-
-        public void AddProperty(string propName)
-        {
-            properties.Add(propName);
-        }
-
-        public List<KeyValuePair<string, string>> getAllProperties(object msgObj)
-        {
-            List<KeyValuePair<string, string>> kvpList = new List<KeyValuePair<string, string>>();
-            foreach (var name in properties)
-            {
-                var value = getPropertyValue(msgObj, name);
-                if (value != null)
-                {
-                    kvpList.Add(new KeyValuePair<string, string>(name, value));
-                }
-            }
-            return kvpList;
-        }
+        private static readonly BindingFlags flags = BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
         public string getPropertyValue(object msgObj, string propertyName)
         {

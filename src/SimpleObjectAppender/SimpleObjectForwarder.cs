@@ -12,18 +12,20 @@ namespace SimpleObjectAppender
 
         public string Separator { get; set; }
         public string EqualsSymbol { get; set; }
+        public Boolean IgnoreNotExists { get; set; }
         public IDescriptor Descriptor { get; set; }
+        public PropertiesDetails Details { get; set; }
 
+        /// <summary>
+        /// Constructor to set defaults values for all params
+        /// </summary>
         public SimpleObjectForwarder()
         {
+            IgnoreNotExists = true;
             EqualsSymbol = defaultEqualsSymbol;
             Separator = defaultSeparator;
             Descriptor = new Descriptor();
-        }
-
-        public void AddDetails(Descriptor descriptor)
-        {
-            Descriptor = descriptor;
+            Details = new PropertiesDetails();
         }
 
         protected override void Append(LoggingEvent loggingEvent)
@@ -43,21 +45,34 @@ namespace SimpleObjectAppender
 
         private LoggingEvent ProcessLogEvent(LoggingEvent loggingEvent)
         {
-            var result = Descriptor.getAllProperties(loggingEvent.MessageObject);
-            var builder = new StringBuilder();
             int i = 0;
-            foreach (var kvp in result)
+            var builder = new StringBuilder();
+            foreach (var propertyName in Details.Properties)
             {
-                builder.AppendFormat("{0}{1}{2}", kvp.Key, EqualsSymbol, kvp.Value);
-                if (++i < result.Count)
+                var value = Descriptor.getPropertyValue(loggingEvent.MessageObject, propertyName);
+                if (value != null || !IgnoreNotExists)
                 {
-                    builder.Append(Separator);
+                    builder.AppendFormat("{0}{1}{2}", propertyName, EqualsSymbol, value);
+                    if (++i < Details.Properties.Count)
+                    {
+                        builder.Append(Separator);
+                    }
                 }
             }
 
             var data = loggingEvent.GetLoggingEventData(FixFlags.Message);
             data.Message = builder.ToString();
             return new LoggingEvent(data);
+        }
+    }
+
+    class PropertiesDetails
+    {
+        public readonly List<string> Properties = new List<string>();
+
+        public void AddProperty(string propName)
+        {
+            Properties.Add(propName);
         }
     }
 }

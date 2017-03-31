@@ -19,7 +19,7 @@ namespace SimpleObjectAppender
         }
         protected override void Convert(TextWriter writer, LoggingEvent loggingEvent)
         {
-            if (Option != null)
+            if (!string.IsNullOrEmpty(Option))
             {
                 var value = Descriptor.getPropertyValue(loggingEvent.MessageObject, Option);
                 if (value != null) {
