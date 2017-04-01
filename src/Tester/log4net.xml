@@ -10,20 +10,18 @@
     <layout type="log4net.Layout.PatternLayout">
       <Converter>
         <name value="object" />
-        <type value="SimpleObjectAppender.SimpleObjectConverter" />
+        <type value="SimpleObjectAppender.SimpleObjectConverter, SimpleObjectAppender" />
       </Converter>
       <conversionPattern value="%-4timestamp %-5level %logger - Name is:%object{Name}, age:%object{Age}%newline" />
     </layout>
   </appender>
 
-  <appender name="objApp" type="SimpleObjectAppender.SimpleObjectForwarder">
+  <appender name="objApp" type="SimpleObjectAppender.SimpleObjectForwarder, SimpleObjectAppender">
     <appender-ref ref="myConsoleAppender" />
     <Details>
       <Property>Name</Property>
       <Property>Age</Property>
     </Details>
-    <Separator>, </Separator>
-    <EqualsSymbol>:</EqualsSymbol>
   </appender>
 
   <root>

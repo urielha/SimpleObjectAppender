@@ -66,6 +66,9 @@ namespace SimpleObjectAppender
         }
     }
 
+    /// <summary>
+    /// Helper class, just to gather all the properties in the xml under one tag
+    /// </summary>
     class PropertiesDetails
     {
         public readonly List<string> Properties = new List<string>();
