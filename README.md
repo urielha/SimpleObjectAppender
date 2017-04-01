@@ -93,9 +93,9 @@ A [log4net console appender][6] ([example][23]) - just a console appender, the c
   </appender>
 ```
 
-[1]: https://github.com/urielha/SimpleObjectAppender#SimpleObjectForwarder
-[2]: https://github.com/urielha/SimpleObjectAppender#SimpleObjectConverter
-[3]: https://github.com/urielha/SimpleObjectAppender#SimpleObjectConsoleAppender
+[1]: https://github.com/urielha/SimpleObjectAppender#simpleobjectforwarder
+[2]: https://github.com/urielha/SimpleObjectAppender#simpleobjectconverter
+[3]: https://github.com/urielha/SimpleObjectAppender#simpleobjectconsoleappender
 [4]: https://logging.apache.org/log4net/release/sdk/?topic=html/T_log4net_Appender_ForwardingAppender.htm
 [5]: https://logging.apache.org/log4net/release/sdk/?topic=html/T_log4net_Layout_Pattern_PatternLayoutConverter.htm
 [6]: https://logging.apache.org/log4net/release/sdk/?topic=html/T_log4net_Appender_AppenderSkeleton.htm
