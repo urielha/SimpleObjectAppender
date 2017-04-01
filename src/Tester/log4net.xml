@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <log4net>
-  <appender name="myConsoleAppender" type="log4net.Appender.ConsoleAppender">
+  <appender name="regularConsoleAppender" type="log4net.Appender.ConsoleAppender">
     <layout type="log4net.Layout.PatternLayout">
       <conversionPattern value="%-4timestamp %-5level %logger - %message%newline" />
     </layout>
   </appender>
 
-  <appender name="ObjectConsoleAppender" type="log4net.Appender.ConsoleAppender">
+  <appender name="objectConverter" type="log4net.Appender.ConsoleAppender">
     <layout type="log4net.Layout.PatternLayout">
       <Converter>
         <name value="object" />
@@ -16,18 +16,27 @@
     </layout>
   </appender>
 
-  <appender name="objApp" type="SimpleObjectAppender.SimpleObjectForwarder, SimpleObjectAppender">
-    <appender-ref ref="myConsoleAppender" />
+  <appender name="objectForwarder" type="SimpleObjectAppender.SimpleObjectForwarder, SimpleObjectAppender">
+    <appender-ref ref="regularConsoleAppender" />
     <Details>
       <Property>Name</Property>
       <Property>Age</Property>
     </Details>
   </appender>
 
+  <appender name="objectConsoleAppender" type="SimpleObjectAppender.SimpleObjectConsoleAppender, SimpleObjectAppender">
+    <Details>
+      <Property>Age</Property>
+      <Property>Name</Property>
+    </Details>
+  </appender>
+
+
   <root>
     <level value="DEBUG" />
-    <appender-ref ref="myConsoleAppender" />
-    <appender-ref ref="ObjectConsoleAppender" />
-    <appender-ref ref="objApp" />
+    <appender-ref ref="regularConsoleAppender" />
+    <appender-ref ref="objectConverter" />
+    <appender-ref ref="objectForwarder" />
+    <appender-ref ref="objectConsoleAppender" />
   </root>
 </log4net>

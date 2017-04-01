@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System;
+using System.Text;
+using System.Linq;
 
 namespace SimpleObjectAppender
 {
-    interface IDescriptor
+    public interface IDescriptor
     {
         string getPropertyValue(object msgObj, string propertyName);
     }

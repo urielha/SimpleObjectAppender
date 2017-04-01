@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Descriptor.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="SimpleObjectConsoleAppender.cs" />
     <Compile Include="SimpleObjectForwarder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleObjectConverter.cs" />

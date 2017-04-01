@@ -2,6 +2,7 @@
 using log4net.Core;
 using System.Text;
 using System.Collections.Generic;
+using SimpleObjectAppender.Helpers;
 
 namespace SimpleObjectAppender
 {
@@ -12,7 +13,7 @@ namespace SimpleObjectAppender
 
         public string Separator { get; set; }
         public string EqualsSymbol { get; set; }
-        public Boolean IgnoreNotExists { get; set; }
+        public bool IgnoreNotExists { get; set; }
         public IDescriptor Descriptor { get; set; }
         public PropertiesDetails Details { get; set; }
 
@@ -45,11 +46,18 @@ namespace SimpleObjectAppender
 
         private LoggingEvent ProcessLogEvent(LoggingEvent loggingEvent)
         {
+            var data = loggingEvent.GetLoggingEventData(FixFlags.Message);
+            data.Message = ObjectToString(loggingEvent.MessageObject);
+            return new LoggingEvent(data);
+        }
+
+        public string ObjectToString(object obj)
+        {
             int i = 0;
             var builder = new StringBuilder();
             foreach (var propertyName in Details.Properties)
             {
-                var value = Descriptor.getPropertyValue(loggingEvent.MessageObject, propertyName);
+                var value = Descriptor.getPropertyValue(obj, propertyName);
                 if (value != null || !IgnoreNotExists)
                 {
                     builder.AppendFormat("{0}{1}{2}", propertyName, EqualsSymbol, value);
@@ -60,22 +68,7 @@ namespace SimpleObjectAppender
                 }
             }
 
-            var data = loggingEvent.GetLoggingEventData(FixFlags.Message);
-            data.Message = builder.ToString();
-            return new LoggingEvent(data);
-        }
-    }
-
-    /// <summary>
-    /// Helper class, just to gather all the properties in the xml under one tag
-    /// </summary>
-    class PropertiesDetails
-    {
-        public readonly List<string> Properties = new List<string>();
-
-        public void AddProperty(string propName)
-        {
-            Properties.Add(propName);
+            return builder.ToString();
         }
     }
 }
